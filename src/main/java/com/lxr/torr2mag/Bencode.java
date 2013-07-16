@@ -32,4 +32,37 @@ public class Bencode {
 
 	}
 
+	public int getInt(String string) {
+
+		if (!string.startsWith("i")) {
+			throw new ParseException("Int format is i<content>e, the prefix should be 'i'");
+		}
+
+		StringBuffer buffer = new StringBuffer();
+		for (int i = 1; i < string.length(); i++) {
+			char c = string.charAt(i);
+			if (c == 'e') {
+				String integerAsString = buffer.toString();
+
+				if ("-0".equals(integerAsString)) {
+					throw new ParseException("Int format is i<content>e, the content should not -0");
+				}
+				if (integerAsString.startsWith("0") && integerAsString.length() > 1) {
+					throw new ParseException("Int format is i<content>e, the content should not start with 0 unless is only 0");
+				}
+
+				try {
+					return Integer.valueOf(integerAsString, 10);
+				} catch (NumberFormatException e) {
+					throw new ParseException("Int format is i<content>e, the content is not a decimal format", e);
+				}
+
+			} else {
+				buffer.append(c);
+			}
+		}
+
+		throw new ParseException("Int format is i<content>e, the suffix should be 'e'");
+	}
+
 }
