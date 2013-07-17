@@ -1,10 +1,12 @@
 package com.lxr.torr2mag;
 
+import java.io.InputStream;
+
 import com.lxr.torr2mag.becode.exception.ParseException;
 
 public class Bencode {
 
-	public String getString(String encodedString) {
+	public String parseString(String encodedString) {
 
 		int tokenIndex = encodedString.indexOf(":");
 
@@ -32,7 +34,12 @@ public class Bencode {
 
 	}
 
-	public int getInt(String string) {
+	public String parseString(InputStream is) {
+		
+		return "";
+	}
+
+	public int parseInt(String string) {
 
 		if (!string.startsWith("i")) {
 			throw new ParseException("Int format is i<content>e, the prefix should be 'i'");
@@ -44,8 +51,8 @@ public class Bencode {
 			if (c == 'e') {
 				String integerAsString = buffer.toString();
 
-				if ("-0".equals(integerAsString)) {
-					throw new ParseException("Int format is i<content>e, the content should not -0");
+				if (integerAsString.startsWith("-0")) {
+					throw new ParseException("Int format is i<content>e, the content should not start with -0");
 				}
 				if (integerAsString.startsWith("0") && integerAsString.length() > 1) {
 					throw new ParseException("Int format is i<content>e, the content should not start with 0 unless is only 0");

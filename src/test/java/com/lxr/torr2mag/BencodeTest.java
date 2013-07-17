@@ -23,10 +23,10 @@ public class BencodeTest {
 
 	@Test
 	public void testGetStringSuccess() {
-		String actual = bencode.getString("4:info");
+		String actual = bencode.parseString("4:info");
 		assertEquals("info", actual);
 
-		actual = bencode.getString("6:stringbb");
+		actual = bencode.parseString("6:stringbb");
 		assertEquals("string", actual);
 	}
 
@@ -34,49 +34,49 @@ public class BencodeTest {
 	public void testGetStringThrowExceptionWhenNoColon() {
 		expectedEx.expect(ParseException.class);
 		expectedEx.expectMessage("String format is <length>:<content>, there is no ':' appeared");
-		bencode.getString("string");
+		bencode.parseString("string");
 	}
 
 	@Test
 	public void testGetStringThrowExceptionWhenLengthIsNotADecimalInteger() {
 		expectedEx.expect(ParseException.class);
 		expectedEx.expectMessage("String format is <length>:<content>, length should a decimal integer and greate than 0");
-		bencode.getString("0x12:string");
+		bencode.parseString("0x12:string");
 	}
 
 	@Test
 	public void testGetStringThrowExceptionWhenLengthLessThanZero() {
 		expectedEx.expect(ParseException.class);
 		expectedEx.expectMessage("String format is <length>:<content>, length should a decimal integer and greate than 0");
-		bencode.getString("-1:string");
+		bencode.parseString("-1:string");
 	}
 
 	@Test
 	public void testGetStringThrowExceptionWhenLengthEqualZero() {
 		expectedEx.expect(ParseException.class);
 		expectedEx.expectMessage("String format is <length>:<content>, length should a decimal integer and greate than 0");
-		bencode.getString("0:string");
+		bencode.parseString("0:string");
 	}
 
 	@Test
 	public void testGetStringThrowExceptionWhenLengthGrateThanContentStringLength() {
 		expectedEx.expect(ParseException.class);
 		expectedEx.expectMessage("String format is <length>:<content>, length should less or equal to content length");
-		bencode.getString("7:string");
+		bencode.parseString("7:string");
 	}
 	
 	@Test
 	public void testGetInt() {
-		int actual = bencode.getInt("i123e");
+		int actual = bencode.parseInt("i123e");
 		assertEquals(123, actual);
 		
-		actual = bencode.getInt("i0e");
+		actual = bencode.parseInt("i0e");
 		assertEquals(0, actual);
 		
-		actual = bencode.getInt("i-123e");
+		actual = bencode.parseInt("i-123e");
 		assertEquals(-123, actual);
 		
-		actual = bencode.getInt("i123e23");
+		actual = bencode.parseInt("i123e23");
 		assertEquals(123, actual);
 	}
 	
@@ -84,42 +84,49 @@ public class BencodeTest {
 	public void testGetIntThrowExceptionWhenPrefixIsNotValid() {
 		expectedEx.expect(ParseException.class);
 		expectedEx.expectMessage("Int format is i<content>e, the prefix should be 'i'");
-		bencode.getInt("I123e");
+		bencode.parseInt("I123e");
 	}
 	
 	@Test
 	public void testGetIntThrowExceptionWhenSuffixIsNotValid() {
 		expectedEx.expect(ParseException.class);
 		expectedEx.expectMessage("Int format is i<content>e, the suffix should be 'e'");
-		bencode.getInt("i123aa");
+		bencode.parseInt("i123aa");
 	}
 	
 	@Test
 	public void testGetIntThrowExceptionWhenContentIsNotZeroButStartWithZero() {
 		expectedEx.expect(ParseException.class);
 		expectedEx.expectMessage("Int format is i<content>e, the content should not start with 0 unless is only 0");
-		bencode.getInt("i0123e");
+		bencode.parseInt("i0123e");
 	}
 	
 	@Test
 	public void testGetIntThrowExceptionWhenContentIsNegativeZero() {
 		expectedEx.expect(ParseException.class);
-		expectedEx.expectMessage("Int format is i<content>e, the content should not -0");
-		bencode.getInt("i-0e");
+		expectedEx.expectMessage("Int format is i<content>e, the content should not start with -0");
+		bencode.parseInt("i-0e");
+	}
+	
+	@Test
+	public void testGetIntThrowExceptionWhenContentIsStartWithNegativeZero() {
+		expectedEx.expect(ParseException.class);
+		expectedEx.expectMessage("Int format is i<content>e, the content should not start with -0");
+		bencode.parseInt("i-0123e");
 	}
 	
 	@Test
 	public void testGetIntThrowExceptionWhenContentIsNotDecimalFormat() {
 		expectedEx.expect(ParseException.class);
 		expectedEx.expectMessage("Int format is i<content>e, the content is not a decimal format");
-		bencode.getInt("i123AAe");
+		bencode.parseInt("i123AAe");
 	}
 	
 	@Test
 	public void testGetIntThrowExceptionWhenContentIsBlank() {
 		expectedEx.expect(ParseException.class);
 		expectedEx.expectMessage("Int format is i<content>e, the content is not a decimal format");
-		bencode.getInt("ie");
+		bencode.parseInt("ie");
 	}
 
 }
