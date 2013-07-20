@@ -1,4 +1,4 @@
-package com.lxr.torr2mag;
+package com.lxr.torr2mag.bencode;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

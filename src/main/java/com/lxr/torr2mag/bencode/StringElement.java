@@ -1,4 +1,4 @@
-package com.lxr.torr2mag;
+package com.lxr.torr2mag.bencode;
 
 public class StringElement {
 

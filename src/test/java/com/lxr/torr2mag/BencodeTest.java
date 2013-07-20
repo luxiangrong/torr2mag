@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import com.lxr.torr2mag.becode.exception.ParseException;
+import com.lxr.torr2mag.bencode.Bencode;
 
 public class BencodeTest {
 
@@ -136,13 +137,6 @@ public class BencodeTest {
 		bencode.parseInt("ie");
 	}
 
-	@Test
-	public void testStringEncode() {
-		StringElement stringElement = new StringElement("string");
-		assertEquals("6:string", stringElement.toEncodedString());
-		
-		stringElement = new StringElement("bencoding");
-		assertEquals("9:bencoding", stringElement.toEncodedString());
-	}
+	
 
 }
