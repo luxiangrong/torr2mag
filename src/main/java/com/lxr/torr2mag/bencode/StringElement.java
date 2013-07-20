@@ -1,6 +1,6 @@
 package com.lxr.torr2mag.bencode;
 
-public class StringElement {
+public class StringElement implements Element{
 
 	private String value;
 
