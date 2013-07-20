@@ -137,7 +137,12 @@ public class BencodeTest {
 	}
 
 	@Test
-	public void testParseListSuccess() {
+	public void testStringEncode() {
+		StringElement stringElement = new StringElement("string");
+		assertEquals("6:string", stringElement.toEncodedString());
+		
+		stringElement = new StringElement("bencoding");
+		assertEquals("9:bencoding", stringElement.toEncodedString());
 	}
 
 }
