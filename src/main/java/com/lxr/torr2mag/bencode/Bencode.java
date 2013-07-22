@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.lxr.torr2mag.becode.exception.ParseException;
+import com.lxr.torr2mag.bencode.exception.ParseException;
 
 public class Bencode {
 

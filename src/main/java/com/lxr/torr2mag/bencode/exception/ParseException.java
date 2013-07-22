@@ -1,4 +1,4 @@
-package com.lxr.torr2mag.becode.exception;
+package com.lxr.torr2mag.bencode.exception;
 
 public class ParseException extends RuntimeException {
 

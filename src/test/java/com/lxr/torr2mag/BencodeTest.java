@@ -10,8 +10,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import com.lxr.torr2mag.becode.exception.ParseException;
 import com.lxr.torr2mag.bencode.Bencode;
+import com.lxr.torr2mag.bencode.exception.ParseException;
 
 public class BencodeTest {
 
