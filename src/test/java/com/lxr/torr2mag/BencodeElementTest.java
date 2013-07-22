@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import com.lxr.torr2mag.bencode.IntElement;
+import com.lxr.torr2mag.bencode.ListElement;
 import com.lxr.torr2mag.bencode.StringElement;
 
 public class BencodeElementTest {
@@ -37,5 +38,18 @@ public class BencodeElementTest {
 
 		intElement = new IntElement(-0);
 		assertEquals("i0e", intElement.toEncodedString());
+	}
+	
+	@Test
+	public void testListEncode() {
+		StringElement stringElement = new StringElement("string");
+		IntElement intElement = new IntElement(123);
+		
+		ListElement listElement = new ListElement();
+		listElement.addElement(stringElement);
+		listElement.addElement(intElement);
+		
+		assertEquals("l6:stringi123ee", listElement.toEncodedString());
+		
 	}
 }

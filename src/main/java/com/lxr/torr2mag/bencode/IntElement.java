@@ -1,6 +1,6 @@
 package com.lxr.torr2mag.bencode;
 
-public class IntElement {
+public class IntElement implements Element {
 
 	private int value;
 
