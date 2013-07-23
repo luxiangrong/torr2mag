@@ -51,17 +51,16 @@ public class BencodeElementTest {
 		listElement.addElement(intElement);
 
 		assertEquals("l6:stringi123ee", listElement.toEncodedString());
-
 	}
 
 	@Test
 	public void testDictionaryEncode() {
-		StringElement stringElement = new StringElement("string");
-		IntElement intElement = new IntElement(123);
+		StringElement keyElement = new StringElement("key");
+		StringElement valueElement = new StringElement("value");
 
 		DictionaryElement dictionaryElement = new DictionaryElement();
-		dictionaryElement.addElement(stringElement, intElement);
+		dictionaryElement.addElement(keyElement, valueElement);
 
-		assertEquals("d6:stringi123ee", dictionaryElement.toEncodedString());
+		assertEquals("d3:key5:valuee", dictionaryElement.toEncodedString());
 	}
 }

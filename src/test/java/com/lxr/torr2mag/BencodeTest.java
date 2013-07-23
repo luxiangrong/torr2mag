@@ -3,6 +3,8 @@ package com.lxr.torr2mag;
 import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import org.junit.Before;
@@ -11,6 +13,11 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import com.lxr.torr2mag.bencode.Bencode;
+import com.lxr.torr2mag.bencode.DictionaryElement;
+import com.lxr.torr2mag.bencode.Element;
+import com.lxr.torr2mag.bencode.IntElement;
+import com.lxr.torr2mag.bencode.ListElement;
+import com.lxr.torr2mag.bencode.StringElement;
 import com.lxr.torr2mag.bencode.exception.ParseException;
 
 public class BencodeTest {
@@ -27,15 +34,15 @@ public class BencodeTest {
 
 	@Test
 	public void testparseStringSuccess() throws FileNotFoundException {
-		String actual = bencode.parseString("4:info");
-		assertEquals("info", actual);
+		Element actual = bencode.parseString("4:info");
+		assertEquals(new StringElement("info"), actual);
 
 		actual = bencode.parseString("6:stringbb");
-		assertEquals("string", actual);
+		assertEquals(new StringElement("string"), actual);
 
 		actual = bencode.parseString(new ByteArrayInputStream("6:string"
 				.getBytes()));
-		assertEquals("string", actual);
+		assertEquals(new StringElement("string"), actual);
 	}
 
 	@Test
@@ -75,17 +82,17 @@ public class BencodeTest {
 
 	@Test
 	public void testParseInt() {
-		int actual = bencode.parseInt("i123e");
-		assertEquals(123, actual);
+		Element actual = bencode.parseInt("i123e");
+		assertEquals(new IntElement(123), actual);
 
 		actual = bencode.parseInt("i0e");
-		assertEquals(0, actual);
+		assertEquals(new IntElement(0), actual);
 
 		actual = bencode.parseInt("i-123e");
-		assertEquals(-123, actual);
+		assertEquals(new IntElement(-123), actual);
 
 		actual = bencode.parseInt("i123e23");
-		assertEquals(123, actual);
+		assertEquals(new IntElement(123), actual);
 	}
 
 	@Test
@@ -137,6 +144,59 @@ public class BencodeTest {
 		bencode.parseInt("ie");
 	}
 
-	
+	@Test
+	public void testParseListSuccess() {
+		ListElement actual = bencode.parseList("l6:stringi123ee");
+
+		StringElement stringElement = new StringElement("string");
+		IntElement intElement = new IntElement(123);
+		ListElement expected = new ListElement();
+		expected.addElement(stringElement);
+		expected.addElement(intElement);
+
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void testParseListThrowExceptionWhenPrefixIsNotValid() {
+		expectedEx.expect(ParseException.class);
+		expectedEx.expectMessage("Invalid list format");
+		bencode.parseList("3l6:stringi123ee");
+	}
+
+	@Test
+	public void testParseListThrowExceptionWhenSuffixIsNotValid() {
+		expectedEx.expect(ParseException.class);
+		expectedEx.expectMessage("Invalid list format");
+		bencode.parseList("l6:stringi123e");
+	}
+
+	@Test
+	public void testParseListThrowExceptionWhenContainInvalidElement() {
+		expectedEx.expect(ParseException.class);
+		expectedEx.expectMessage("Invalid element format");
+		bencode.parseList("l6:stringg123e");
+	}
+
+	@Test
+	public void testParseDictionarySuccess() {
+		DictionaryElement actual = bencode
+				.parseDictionary("d3:bar4:spam3:fooi42ee");
+
+		DictionaryElement expected = new DictionaryElement();
+		expected.addElement(new StringElement("bar"), new StringElement("spam"));
+		expected.addElement(new StringElement("foo"), new IntElement(42));
+
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void testParse() throws FileNotFoundException {
+		Element element = bencode.parse(new FileInputStream(new File(
+				"src/test/resources/2.torrent")));
+
+		System.out.println(element.toEncodedString());
+
+	}
 
 }

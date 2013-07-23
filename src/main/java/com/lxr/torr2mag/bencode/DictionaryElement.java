@@ -1,6 +1,6 @@
 package com.lxr.torr2mag.bencode;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -9,7 +9,7 @@ public class DictionaryElement implements Element {
 	private Map<StringElement, Element> value;
 
 	public DictionaryElement() {
-		value = new HashMap<StringElement, Element>();
+		value = new LinkedHashMap<StringElement, Element>();
 	}
 
 	@Override
@@ -27,6 +27,12 @@ public class DictionaryElement implements Element {
 
 	public void addElement(StringElement stringElement, Element element) {
 		value.put(stringElement, element);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		DictionaryElement other = (DictionaryElement) obj;
+		return other.toEncodedString().equals(toEncodedString());
 	}
 
 }

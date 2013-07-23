@@ -12,4 +12,10 @@ public class IntElement implements Element {
 		return "i" + this.value + "e";
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		IntElement other = (IntElement) obj;
+		return other.value == value;
+	}
+
 }

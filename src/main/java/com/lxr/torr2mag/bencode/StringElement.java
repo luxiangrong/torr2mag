@@ -1,6 +1,6 @@
 package com.lxr.torr2mag.bencode;
 
-public class StringElement implements Element{
+public class StringElement implements Element {
 
 	private String value;
 
@@ -16,7 +16,20 @@ public class StringElement implements Element{
 		int length = value.length();
 
 		return length + ":" + value;
+	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof String) {
+			return obj.equals(value);
+		}
+		StringElement other = (StringElement) obj;
+		return other.value.equals(value);
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
 	}
 
 }

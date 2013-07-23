@@ -5,28 +5,40 @@ import java.util.List;
 
 public class ListElement implements Element {
 
-	private List<Element> delegate;
+	private List<Element> value;
+
+	public ListElement(List<Element> value) {
+		this.value = value;
+	}
 
 	public ListElement() {
-		this.delegate = new ArrayList<Element>();
+		this(new ArrayList<Element>());
 	}
 
 	public ListElement(Element element) {
 		this();
-		this.addElement(element);
+		addElement(element);
 	}
 
 	public void addElement(Element element) {
-		delegate.add(element);
+		value.add(element);
 	}
 
 	@Override
 	public String toEncodedString() {
-		String result = "l";
-		for (Element element : delegate) {
-			result += element.toEncodedString();
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("l");
+		for (Element element : value) {
+			buffer.append(element.toEncodedString());
 		}
-		return result += "e";
+		buffer.append("e");
+		return buffer.toString();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		ListElement other = (ListElement) obj;
+		return other.value.equals(value);
 	}
 
 }
