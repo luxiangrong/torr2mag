@@ -35,4 +35,12 @@ public class DictionaryElement implements Element {
 		return other.toEncodedString().equals(toEncodedString());
 	}
 
+	public Element get(String key) {
+		return this.value.get(new StringElement(key));
+	}
+
+	public void put(String key, Element element) {
+		value.put(new StringElement(key), element);
+	}
+
 }

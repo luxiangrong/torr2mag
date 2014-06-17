@@ -3,24 +3,24 @@ package com.lxr.torr2mag.bencode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListElement implements Element {
+public class ListElement<T extends Element> implements Element {
 
-	private List<Element> value;
+	private List<T> value;
 
-	public ListElement(List<Element> value) {
+	public ListElement(List<T> value) {
 		this.value = value;
 	}
 
 	public ListElement() {
-		this(new ArrayList<Element>());
+		this(new ArrayList<T>());
 	}
 
-	public ListElement(Element element) {
+	public ListElement(T element) {
 		this();
 		addElement(element);
 	}
 
-	public void addElement(Element element) {
+	public void addElement(T element) {
 		value.add(element);
 	}
 
@@ -39,6 +39,10 @@ public class ListElement implements Element {
 	public boolean equals(Object obj) {
 		ListElement other = (ListElement) obj;
 		return other.value.equals(value);
+	}
+
+	public List<T> getValue() {
+		return value;
 	}
 
 }

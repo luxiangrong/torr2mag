@@ -29,7 +29,11 @@ public class StringElement implements Element {
 
 	@Override
 	public int hashCode() {
-		return super.hashCode();
+		return value.hashCode();
+	}
+	
+	public String getValue() {
+		return this.value;
 	}
 
 }
